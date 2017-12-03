@@ -21,7 +21,6 @@ class Editor extends React.Component<any, any> {
   constructor(props: EditorProps) {
     super(props);
     this.state = {poData: props.poData};
-    console.log(this.state)
   }
 
   updateTranslation(key: string, index: number, value: string) {
@@ -32,14 +31,12 @@ class Editor extends React.Component<any, any> {
   }
 
   downloadTranslations() {
-      console.log(this.translations)
       for (const key of Object.keys(this.translations)) {
         this.state.poData.translations[''][key].msgstr = this.translations[key]
       }
-      console.log(this.state.poData.translations[''])
       const content = serialize(this.state.poData);
-      var blob = new Blob([content], {type: 'text/plain'});
-      var elem = window.document.createElement('a');
+      const blob = new Blob([content], {type: 'text/plain'});
+      const elem = window.document.createElement('a');
       elem.href = window.URL.createObjectURL(blob);
       elem.download = 'translated.po';
       document.body.appendChild(elem);
@@ -76,7 +73,6 @@ class Editor extends React.Component<any, any> {
   }
 
   render() {
-    console.log(this.state.poData)
     return <div>
         <div>
           {Object.keys(this.state.poData.translations['']).map((key: string) => this.renderMsg(key, this.state.poData.translations[''][key]))}
@@ -97,17 +93,17 @@ class App extends React.Component {
     evt.stopPropagation();
     evt.preventDefault();
 
-    var files = evt.dataTransfer.files; // FileList object.
+    const files = evt.dataTransfer.files; // FileList object.
 
     // files is a FileList of File objects. List some properties.
-    for (var i = 0, f; f = files[i]; i++) {
-      var reader = new FileReader();
+    for (let i = 0, f; f = files[i]; i++) {
+      const reader = new FileReader();
       // Closure to capture the file information.
       reader.onload = function(e: any) {
           const data = e.target.result;
           const poData = parse(data);
           ReactDOM.render(
-            <Editor poData={poData} />,
+              <Editor poData={poData} />,
               document.getElementById('root') as HTMLElement,
           );
         };
