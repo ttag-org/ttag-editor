@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+translations.pot
+.vscode/
+package-lock.json
+*.swp
