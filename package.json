@@ -18,6 +18,7 @@
     "lint": "tslint --fix -c tslint.json src/**/*.ts src/**/*.tsx",
     "tsc": "tsc"
   },
+  "homepage": "https://c-3po-org.github.io/c-3po-editor/",
   "devDependencies": {
     "@types/jest": "^21.1.8",
     "@types/node": "^8.0.53",
