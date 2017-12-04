@@ -1,22 +1,22 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DragEvent } from 'react';
-import * as PropTypes from "prop-types";
+import * as PropTypes from 'prop-types';
 import './App.css';
-import {parse, Message, Messages, PoData} from "./parser";
-import {serialize} from "./serializer";
+import { parse, Message, Messages, PoData } from './parser';
+import { serialize } from './serializer';
 
 type EditorProps = {
   poData: PoData
-}
+};
 
-class Editor extends React.Component<any, any> {
+class Editor extends React.Component<{}, {}> {
 
   static propTypes = {
     poData: PropTypes.object
-  }
+  };
 
-  translations = {}
+  translations = {};
   
   constructor(props: EditorProps) {
     super(props);
@@ -24,15 +24,15 @@ class Editor extends React.Component<any, any> {
   }
 
   updateTranslation(key: string, index: number, value: string) {
-    if (!this.translations[key]){
-      this.translations[key] = new Array()
+    if (!this.translations[key]) {
+      this.translations[key] = new Array();
     }
-    this.translations[key][index] = value
+    this.translations[key][index] = value;
   }
 
   downloadTranslations() {
       for (const key of Object.keys(this.translations)) {
-        this.state.poData.translations[''][key].msgstr = this.translations[key]
+        this.state.poData.translations[''][key].msgstr = this.translations[key];
       }
       const content = serialize(this.state.poData);
       const blob = new Blob([content], {type: 'text/plain'});
@@ -44,11 +44,11 @@ class Editor extends React.Component<any, any> {
       document.body.removeChild(elem);
   }
 
-  renderMsg(key:string, msg: Message) {
-    if(msg.msgid == ''){
-      return null
+  renderMsg(key: string, msg: Message) {
+    if (msg.msgid === '') {
+      return null;
     }
-    return <div key={key}>
+    return (<div key={key}>
       <div>
         <span>msgid</span>
         &nbsp;
@@ -57,20 +57,20 @@ class Editor extends React.Component<any, any> {
       <div>
         {msg.msgstr.map((translation: string, index: number) => {
           return <div key={`${key}_${index}`}>
-              <span style={{verticalAlign: "top"}}>{`msgstr[${index}] `}</span>
-              <textarea defaultValue={translation} onChange={(ev) => this.updateTranslation(key, index, ev.target.value)} style={{display: "inline-block"}} />
-            </div>
+              <span style={{verticalAlign: 'top'}}>{`msgstr[${index}] `}</span>
+              <textarea defaultValue={translation} onChange={(ev) => this.updateTranslation(key, index, ev.target.value)} style={{display: 'inline-block'}} />
+            </div>;
         })}
       </div>
       <br/>
-    </div>
+      </div>);
   }
 
   iterMessages = function* (m: Messages): IterableIterator<Message> {
-    for(const key of Object.keys(m)){
+    for (const key of Object.keys(m)) {
       yield m[key];
     }
-  }
+  };
 
   render() {
     return <div>
@@ -78,16 +78,15 @@ class Editor extends React.Component<any, any> {
           {Object.keys(this.state.poData.translations['']).map((key: string) => this.renderMsg(key, this.state.poData.translations[''][key]))}
         </div>
         <input type="button" value="Download" onClick={() => this.downloadTranslations()} />
-      </div>
+      </div>;
   }
 }
 
 class App extends React.Component {
 
-  constructor(props:any) {
-    super(props)
+  constructor(props: {}) {
+    super(props);
   }
-
 
   onDrop(evt: DragEvent<HTMLDivElement>) {
     evt.stopPropagation();
@@ -99,7 +98,7 @@ class App extends React.Component {
     for (let i = 0, f; f = files[i]; i++) {
       const reader = new FileReader();
       // Closure to capture the file information.
-      reader.onload = function(e: any) {
+      reader.onload = function(e: {}) {
           const data = e.target.result;
           const poData = parse(data);
           ReactDOM.render(
@@ -107,7 +106,7 @@ class App extends React.Component {
               document.getElementById('root') as HTMLElement,
           );
         };
-        reader.readAsText(f);
+      reader.readAsText(f);
       }
     }
 
@@ -118,10 +117,10 @@ class App extends React.Component {
   }
 
   render() {
-    return <div style={{width: "500px", height:"500px", border:"1px solid black"}} onDrop={this.onDrop} onDragOver={this.onDragOver}>
+    return <div style={{width: '500px', height: '500px', border: '1px solid black'}} onDrop={this.onDrop} onDragOver={this.onDragOver}>
       <strong>Drag one or more files to this Drop Zone ...</strong>
       <input type="file"/>
-    </div>
+    </div>;
   }
 }
 

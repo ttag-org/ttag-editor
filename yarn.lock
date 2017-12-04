@@ -5164,7 +5164,7 @@ tslint-react@^3.2.0:
   dependencies:
     tsutils "^2.8.0"
 
-tslint@^5.7.0:
+tslint@^5.7.0, tslint@^5.8.0:
   version "5.8.0"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.8.0.tgz#1f49ad5b2e77c76c3af4ddcae552ae4e3612eb13"
   dependencies:
@@ -5212,6 +5212,10 @@ type-is@~1.6.15:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.15"
+
+typescript@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.2.tgz#3c5b6fd7f6de0914269027f03c0946758f7673a4"
 
 typescript@~2.5.3:
   version "2.5.3"
