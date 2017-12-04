@@ -15,7 +15,8 @@
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "pretty": "prettier --write \"./src/**/*.ts\" \"./src/**/*.tsx\" \"./tests/**/*.ts\" \"./tests/**/*.tsx\"",
-    "lint": "tslint --fix -c tslint.json src/**/*.ts src/**/*.tsx"
+    "lint": "tslint --fix -c tslint.json src/**/*.ts src/**/*.tsx",
+    "tsc": "tsc"
   },
   "devDependencies": {
     "@types/jest": "^21.1.8",
