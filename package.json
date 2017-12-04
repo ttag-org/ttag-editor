@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
+    "build": "CI=false react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "pretty": "prettier --write \"./src/**/*.ts\" \"./src/**/*.tsx\" \"./tests/**/*.ts\" \"./tests/**/*.tsx\"",
