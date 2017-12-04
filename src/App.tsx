@@ -10,7 +10,11 @@ type EditorProps = {
   poData: PoData;
 };
 
-class Editor extends React.Component<{}, {}> {
+type EditorState = {
+  poData: PoData;
+};
+
+class Editor extends React.Component<EditorProps, EditorState> {
   static propTypes = {
     poData: PropTypes.object
   };
@@ -108,8 +112,8 @@ class App extends React.Component {
     for (let i = 0, f; (f = files[i]); i++) {
       const reader = new FileReader();
       // Closure to capture the file information.
-      reader.onload = function(e: {}) {
-        const data = e.target.result;
+      reader.onload = function(e: Event) {
+        const data = reader.result;
         const poData = parse(data);
         ReactDOM.render(<Editor poData={poData} />, document.getElementById('root') as HTMLElement);
       };
