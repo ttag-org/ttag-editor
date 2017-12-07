@@ -17,7 +17,14 @@
     "eject": "react-scripts-ts eject",
     "pretty": "prettier --write \"./src/**/*.ts\" \"./src/**/*.tsx\" \"./tests/**/*.ts\" \"./tests/**/*.tsx\"",
     "lint": "tslint --fix -c tslint.json src/**/*.ts src/**/*.tsx",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,css,tsx}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "homepage": "https://c-3po-org.github.io/c-3po-editor/",
   "devDependencies": {
@@ -27,6 +34,7 @@
     "@types/react-dom": "^16.0.3",
     "prettier": "1.8.2",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.2"
+    "typescript": "^2.6.2",
+    "lint-staged": "^5.0.0"
   }
 }

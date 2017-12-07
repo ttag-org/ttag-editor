@@ -1,12 +1,12 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { DragEvent } from 'react';
-import * as PropTypes from 'prop-types';
-import './App.css';
-import { parse, Message, Messages, PoData } from './parser';
-import { serialize } from './serializer';
-import index from "./searcher"
-import {Searcher} from "./searcher";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { DragEvent } from "react";
+import * as PropTypes from "prop-types";
+import "./App.css";
+import { parse, Message, Messages, PoData } from "./parser";
+import { serialize } from "./serializer";
+import indexDocs from "./searcher";
+import { Searcher } from "./searcher";
 
 type EditorProps = {
   poData: PoData;
@@ -22,20 +22,20 @@ class Editor extends React.Component<EditorProps, EditorState> {
     poData: PropTypes.object
   };
 
-  index: Searcher;
+  msgIndex: Searcher;
   translations: Object;
 
   constructor(props: EditorProps) {
     super(props);
-    this.state = { 
+    this.state = {
       poData: props.poData,
-      searchTerm: '',
+      searchTerm: ""
     };
     const docs = [];
-    for (let key of Object.keys(props.poData.translations[''])){
-      docs.push(props.poData.translations[''][key])
+    for (let key of Object.keys(props.poData.translations[""])) {
+      docs.push(props.poData.translations[""][key]);
     }
-    this.index = index(docs)
+    this.msgIndex = indexDocs(docs);
     this.translations = {};
   }
 
@@ -48,20 +48,20 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   downloadTranslations() {
     for (const key of Object.keys(this.translations)) {
-      this.state.poData.translations[''][key].msgstr = this.translations[key];
+      this.state.poData.translations[""][key].msgstr = this.translations[key];
     }
     const content = serialize(this.state.poData);
-    const blob = new Blob([content], { type: 'text/plain' });
-    const elem = window.document.createElement('a');
+    const blob = new Blob([content], { type: "text/plain" });
+    const elem = window.document.createElement("a");
     elem.href = window.URL.createObjectURL(blob);
-    elem.download = 'translated.po';
+    elem.download = "translated.po";
     document.body.appendChild(elem);
     elem.click();
     document.body.removeChild(elem);
   }
 
   renderMsg(msg: Message) {
-    if (msg.msgid === '') {
+    if (msg.msgid === "") {
       return null;
     }
     return (
@@ -75,11 +75,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
           {msg.msgstr.map((translation: string, index: number) => {
             return (
               <div key={`${msg.msgid}_${index}`}>
-                <span style={{ verticalAlign: 'top' }}>{`msgstr[${index}] `}</span>
+                <span style={{ verticalAlign: "top" }}>{`msgstr[${index}] `}</span>
                 <textarea
                   defaultValue={translation}
                   onChange={ev => this.updateTranslation(msg.msgid, index, ev.target.value)}
-                  style={{ display: 'inline-block' }}
+                  style={{ display: "inline-block" }}
                 />
               </div>
             );
@@ -97,28 +97,26 @@ class Editor extends React.Component<EditorProps, EditorState> {
   };
 
   updateSearchTerm(searchTerm: string) {
-    this.setState({searchTerm})
+    this.setState({ searchTerm });
   }
 
-  getFilteredMessages(): Message[]{
+  getFilteredMessages(): Message[] {
     if (this.state.searchTerm.trim()) {
-      const docs = this.index.search(this.state.searchTerm.trim());
-      return docs.map((d) => this.state.poData.translations[''][d.msgid])
+      const docs = this.msgIndex.search(this.state.searchTerm.trim());
+      return docs.map(d => this.state.poData.translations[""][d.msgid]);
     } else {
-      const keys = Object.keys(this.state.poData.translations[''])
-      return keys.map((k) => this.state.poData.translations[''][k])
+      const keys = Object.keys(this.state.poData.translations[""]);
+      return keys.map(k => this.state.poData.translations[""][k]);
     }
   }
 
   render() {
     return (
-      <div style={{width: "500px", margin: "0 auto"}}>
+      <div style={{ width: "500px", margin: "0 auto" }}>
         <div>
-          <input type="text" placeholder="Search" onChange={(ev) => this.updateSearchTerm(ev.target.value)} />
+          <input type="text" placeholder="Search" onChange={ev => this.updateSearchTerm(ev.target.value)} />
         </div>
-        <div>
-        {this.getFilteredMessages().map((m) => this.renderMsg(m))}
-        </div>
+        <div>{this.getFilteredMessages().map(m => this.renderMsg(m))}</div>
         <input type="button" value="Download" onClick={() => this.downloadTranslations()} />
       </div>
     );
@@ -143,7 +141,7 @@ class App extends React.Component {
       reader.onload = function(e: Event) {
         const data = reader.result;
         const poData = parse(data);
-        ReactDOM.render(<Editor poData={poData} />, document.getElementById('root') as HTMLElement);
+        ReactDOM.render(<Editor poData={poData} />, document.getElementById("root") as HTMLElement);
       };
       reader.readAsText(f);
     }
@@ -152,17 +150,25 @@ class App extends React.Component {
   onDragOver(evt: DragEvent<HTMLDivElement>) {
     evt.stopPropagation();
     evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    evt.dataTransfer.dropEffect = "copy"; // Explicitly show this is a copy.
   }
 
   render() {
     return (
       <div
-        style={{ width: '300px', height: '200px', margin: '0 auto', border: '3px dotted gray', transform: "translateY(100%)" }}
+        style={{
+          width: "300px",
+          height: "200px",
+          margin: "0 auto",
+          border: "3px dotted gray",
+          transform: "translateY(100%)"
+        }}
         onDrop={this.onDrop}
         onDragOver={this.onDragOver}
       >
-        <div style={{width: "170px", margin: "0 auto", position: "relative", top: "50%"}}><strong>Drag one or more files</strong></div>
+        <div style={{ width: "170px", margin: "0 auto", position: "relative", top: "50%" }}>
+          <strong>Drag one or more files</strong>
+        </div>
       </div>
     );
   }

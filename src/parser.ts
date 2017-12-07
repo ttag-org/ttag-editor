@@ -1,5 +1,5 @@
-import { po } from 'gettext-parser';
-import './declarations';
+import { po } from "gettext-parser";
+import "./declarations";
 
 export interface Comments {
   reference?: string;
@@ -25,8 +25,8 @@ export type Translations = {
 };
 
 export type Headers = {
-  'content-type'?: string;
-  'plural-forms'?: string;
+  "content-type"?: string;
+  "plural-forms"?: string;
 };
 
 export type PoData = {
