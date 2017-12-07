@@ -1,2 +1,2 @@
-declare module "gettext-parser";
-declare module "fuse.js";
+declare module 'gettext-parser';
+declare module 'fuse.js';
