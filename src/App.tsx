@@ -5,6 +5,8 @@ import * as PropTypes from 'prop-types';
 import './App.css';
 import { parse, Message, Messages, PoData } from './parser';
 import { serialize } from './serializer';
+import index from "./searcher"
+import {Searcher} from "./searcher";
 
 type EditorProps = {
   poData: PoData;
@@ -12,6 +14,7 @@ type EditorProps = {
 
 type EditorState = {
   poData: PoData;
+  searchTerm: string;
 };
 
 class Editor extends React.Component<EditorProps, EditorState> {
@@ -19,11 +22,21 @@ class Editor extends React.Component<EditorProps, EditorState> {
     poData: PropTypes.object
   };
 
-  translations = {};
+  index: Searcher;
+  translations: Object;
 
   constructor(props: EditorProps) {
     super(props);
-    this.state = { poData: props.poData };
+    this.state = { 
+      poData: props.poData,
+      searchTerm: '',
+    };
+    const docs = [];
+    for (let key of Object.keys(props.poData.translations[''])){
+      docs.push(props.poData.translations[''][key])
+    }
+    this.index = index(docs)
+    this.translations = {};
   }
 
   updateTranslation(key: string, index: number, value: string) {
@@ -47,12 +60,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
     document.body.removeChild(elem);
   }
 
-  renderMsg(key: string, msg: Message) {
+  renderMsg(msg: Message) {
     if (msg.msgid === '') {
       return null;
     }
     return (
-      <div key={key}>
+      <div key={msg.msgid}>
         <div>
           <span>msgid</span>
           &nbsp;
@@ -61,11 +74,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
         <div>
           {msg.msgstr.map((translation: string, index: number) => {
             return (
-              <div key={`${key}_${index}`}>
+              <div key={`${msg.msgid}_${index}`}>
                 <span style={{ verticalAlign: 'top' }}>{`msgstr[${index}] `}</span>
                 <textarea
                   defaultValue={translation}
-                  onChange={ev => this.updateTranslation(key, index, ev.target.value)}
+                  onChange={ev => this.updateTranslation(msg.msgid, index, ev.target.value)}
                   style={{ display: 'inline-block' }}
                 />
               </div>
@@ -83,13 +96,28 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   };
 
+  updateSearchTerm(searchTerm: string) {
+    this.setState({searchTerm})
+  }
+
+  getFilteredMessages(): Message[]{
+    if (this.state.searchTerm.trim()) {
+      const docs = this.index.search(this.state.searchTerm.trim());
+      return docs.map((d) => this.state.poData.translations[''][d.msgid])
+    } else {
+      const keys = Object.keys(this.state.poData.translations[''])
+      return keys.map((k) => this.state.poData.translations[''][k])
+    }
+  }
+
   render() {
     return (
-      <div>
+      <div style={{width: "500px", margin: "0 auto"}}>
         <div>
-          {Object.keys(this.state.poData.translations['']).map((key: string) =>
-            this.renderMsg(key, this.state.poData.translations[''][key])
-          )}
+          <input type="text" placeholder="Search" onChange={(ev) => this.updateSearchTerm(ev.target.value)} />
+        </div>
+        <div>
+        {this.getFilteredMessages().map((m) => this.renderMsg(m))}
         </div>
         <input type="button" value="Download" onClick={() => this.downloadTranslations()} />
       </div>
@@ -130,12 +158,11 @@ class App extends React.Component {
   render() {
     return (
       <div
-        style={{ width: '500px', height: '500px', border: '1px solid black' }}
+        style={{ width: '300px', height: '200px', margin: '0 auto', border: '3px dotted gray', transform: "translateY(100%)" }}
         onDrop={this.onDrop}
         onDragOver={this.onDragOver}
       >
-        <strong>Drag one or more files to this Drop Zone ...</strong>
-        <input type="file" />
+        <div style={{width: "170px", margin: "0 auto", position: "relative", top: "50%"}}><strong>Drag one or more files</strong></div>
       </div>
     );
   }
