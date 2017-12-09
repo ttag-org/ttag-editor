@@ -3,6 +3,7 @@ import { TopMenu } from "./TopMenu";
 import { RootState } from "src/store";
 import { connect } from "react-redux";
 import { DownloadBtn } from "./DownloadBtn";
+import { Redirect } from "react-router-dom";
 
 const mapStateToProps = (state: RootState) => ({
   poFile: state.app.poFile
@@ -10,7 +11,7 @@ const mapStateToProps = (state: RootState) => ({
 
 export const BasePage = connect(mapStateToProps, {})(props => {
   if (!props.poFile) {
-      return null;
+      return <Redirect to="/"/>;
   }
   return (
     <div style={{ width: "500px", margin: "0 auto" }}>
