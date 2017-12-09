@@ -1,8 +1,9 @@
-import * as Fuse from 'fuse.js';
-import { Comments } from './parser';
+import * as Fuse from "fuse.js";
+import { Comments } from "./parser";
 
 interface Document {
   msgid: string;
+  msgctxt?: string;
   comments?: Comments;
 }
 
@@ -18,7 +19,7 @@ export default function indexDocs(docs: Document[]): Searcher {
     distance: 100,
     maxPatternLength: 32,
     minMatchCharLength: 1,
-    keys: ['msgid', 'comments.reference']
+    keys: ["msgid", "comments.reference"]
   };
   return new Fuse(docs, options);
 }
