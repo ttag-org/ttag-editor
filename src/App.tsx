@@ -1,16 +1,25 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { DragEvent } from 'react';
-import * as PropTypes from 'prop-types';
-import './App.css';
-import { parse, Message, Messages, PoData } from './parser';
-import { serialize } from './serializer';
-import indexDocs from './searcher';
-import { Searcher } from './searcher';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { DragEvent } from "react";
+import * as PropTypes from "prop-types";
+import "./App.css";
+import { parse, Message, PoData, Translations } from "./parser";
+import { serialize } from "./serializer";
+import indexDocs from "./searcher";
+import { Searcher } from "./searcher";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 function isTranslated(msg: Message): boolean {
   return msg.msgstr.filter(s => !!s).length === msg.msgstr.length;
+}
+
+function* iterateTranslations(translations: Translations): IterableIterator<Message> {
+  for (const ctxtId of Object.keys(translations)) {
+    const ctxt = translations[ctxtId];
+    for (const msgid of Object.keys(ctxt)) {
+      yield ctxt[msgid];
+    }
+  }
 }
 
 type EditorProps = {
@@ -19,6 +28,7 @@ type EditorProps = {
 
 type EditorState = {
   poData: PoData;
+  msgs: Message[];
   searchTerm: string;
   page: number;
 };
@@ -34,38 +44,43 @@ class Editor extends React.Component<EditorProps, EditorState> {
     super(props);
     this.state = {
       poData: props.poData,
-      searchTerm: '',
-      page: 0
+      searchTerm: "",
+      page: 0,
+      // msgs are an array of references, so changing translations will change them also
+      msgs: Array.from(iterateTranslations(props.poData.translations))
     };
-    const docs = [];
-    for (let key of Object.keys(props.poData.translations[''])) {
-      docs.push(props.poData.translations[''][key]);
-    }
-    this.msgIndex = indexDocs(docs);
+    this.msgIndex = indexDocs(this.state.msgs);
   }
 
-  updateTranslation(key: string, index: number, value: string) {
+  updateTranslation(key: string, ctxt: string, index: number, value: string) {
     // Mutable state, hoozah!
-    this.state.poData.translations[''][key].msgstr[index] = value;
+    this.state.poData.translations[ctxt][key].msgstr[index] = value;
   }
 
   downloadTranslations() {
     const content = serialize(this.state.poData);
-    const blob = new Blob([content], { type: 'text/plain' });
-    const elem = window.document.createElement('a');
+    const blob = new Blob([content], { type: "text/plain" });
+    const elem = window.document.createElement("a");
     elem.href = window.URL.createObjectURL(blob);
-    elem.download = 'translated.po';
+    elem.download = "translated.po";
     document.body.appendChild(elem);
     elem.click();
     document.body.removeChild(elem);
   }
 
   renderMsg(msg: Message) {
-    if (msg.msgid === '') {
+    if (msg.msgid === "") {
       return null;
     }
     return (
       <div key={msg.msgid}>
+        {msg.msgctxt ? (
+          <div>
+            <span>msgctxt</span>
+            &nbsp;
+            <span>{msg.msgctxt}</span>
+          </div>
+        ) : null}
         <div>
           <span>msgid</span>
           &nbsp;
@@ -75,11 +90,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
           {msg.msgstr.map((translation: string, index: number) => {
             return (
               <div key={`${msg.msgid}_${index}`}>
-                <span style={{ verticalAlign: 'top' }}>{`msgstr[${index}] `}</span>
+                <span style={{ verticalAlign: "top" }}>{`msgstr[${index}] `}</span>
                 <textarea
                   defaultValue={translation}
-                  onChange={ev => this.updateTranslation(msg.msgid, index, ev.target.value)}
-                  style={{ display: 'inline-block' }}
+                  onChange={ev => this.updateTranslation(msg.msgid, msg.msgctxt || "", index, ev.target.value)}
+                  style={{ display: "inline-block" }}
                 />
               </div>
             );
@@ -90,45 +105,37 @@ class Editor extends React.Component<EditorProps, EditorState> {
     );
   }
 
-  iterMessages = function*(m: Messages): IterableIterator<Message> {
-    for (const key of Object.keys(m)) {
-      yield m[key];
-    }
-  };
-
   updateSearchTerm(searchTerm: string) {
     this.setState({ searchTerm, page: 0 });
   }
 
   getFilteredMessages(): Message[] {
+    const translations = this.state.poData.translations;
     if (this.state.searchTerm.trim()) {
       const docs = this.msgIndex.search(this.state.searchTerm.trim());
-      return docs.map(d => this.state.poData.translations[''][d.msgid]);
+      return docs.map(d => translations[d.msgctxt || ""][d.msgid]);
     } else {
-      const keys = Object.keys(this.state.poData.translations['']);
-      return keys.map(k => this.state.poData.translations[''][k]);
+      return this.state.msgs;
     }
   }
 
   renderStats() {
-    const translations = this.state.poData.translations[''];
-    const keys = Object.keys(translations);
-    const translatedCount = keys.reduce((acc: number, key: string): number => {
-      return isTranslated(translations[key]) ? acc + 1 : acc;
-    },                                  0);
-    const untranslatedPercent = Math.floor(translatedCount / keys.length * 100);
+    const translatedCount = this.state.msgs.reduce((acc: number, msg: Message): number => {
+      return isTranslated(msg) ? acc + 1 : acc;
+    }, 0);
+    const untranslatedPercent = Math.floor(translatedCount / this.state.msgs.length * 100);
     return (
-      <div style={{ width: '720px', margin: '0 auto' }}>
-        <div style={{ border: '1px solid black', height: '50px', width: '500px', margin: '0 auto' }}>
+      <div style={{ width: "720px", margin: "0 auto" }}>
+        <div style={{ border: "1px solid black", height: "50px", width: "500px", margin: "0 auto" }}>
           <div
             style={{
-              'background-color': 'red',
-              height: '100%',
+              "background-color": "red",
+              height: "100%",
               width: `${untranslatedPercent}%`,
-              color: 'cyan',
-              'text-align': 'center',
-              'line-height': '50px',
-              'vertical-align': 'middle'
+              color: "cyan",
+              "text-align": "center",
+              "line-height": "50px",
+              "vertical-align": "middle"
             }}
           >
             {`${untranslatedPercent}% is translated`}
@@ -161,15 +168,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   renderTranslate() {
-    const translations = this.state.poData.translations[''];
-    const keys = Object.keys(translations);
-    const untranslatedKey = keys.slice(1).find(k => !isTranslated(translations[k]));
-    if (untranslatedKey === undefined) {
+    const untranslatedMsg = this.state.msgs.slice(1).find(msg => !isTranslated(msg));
+    if (untranslatedMsg === undefined) {
       return <div>All Done!</div>;
     } else {
       return (
         <div>
-          {this.renderMsg(translations[untranslatedKey])}
+          {this.renderMsg(untranslatedMsg)}
           <Link to={`/translate`}>Next</Link>
         </div>
       );
@@ -179,7 +184,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   render() {
     return (
       <Router>
-        <div style={{ width: '500px', margin: '0 auto' }}>
+        <div style={{ width: "500px", margin: "0 auto" }}>
           <Link to={`/translate`}>Translate</Link>
           <Link to={`/all`}>All</Link>
           <Route exact={true} path="/" component={() => this.renderStats()} />
@@ -188,7 +193,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
           <Route
             path="/page/:page"
             component={({ match: { params: { page } } }: { match: { params: { page: string } } }) =>
-              this.renderMsgs(parseInt(page, 10))}
+              this.renderMsgs(parseInt(page, 10))
+            }
           />
           <input type="button" value="Download" onClick={() => this.downloadTranslations()} />
         </div>
@@ -215,7 +221,7 @@ class App extends React.Component {
       reader.onload = function(e: Event) {
         const data = reader.result;
         const poData = parse(data);
-        ReactDOM.render(<Editor poData={poData} />, document.getElementById('root') as HTMLElement);
+        ReactDOM.render(<Editor poData={poData} />, document.getElementById("root") as HTMLElement);
       };
       reader.readAsText(f);
     }
@@ -224,23 +230,23 @@ class App extends React.Component {
   onDragOver(evt: DragEvent<HTMLDivElement>) {
     evt.stopPropagation();
     evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    evt.dataTransfer.dropEffect = "copy"; // Explicitly show this is a copy.
   }
 
   render() {
     return (
       <div
         style={{
-          width: '300px',
-          height: '200px',
-          margin: '0 auto',
-          border: '3px dotted gray',
-          transform: 'translateY(100%)'
+          width: "300px",
+          height: "200px",
+          margin: "0 auto",
+          border: "3px dotted gray",
+          transform: "translateY(100%)"
         }}
         onDrop={this.onDrop}
         onDragOver={this.onDragOver}
       >
-        <div style={{ width: '170px', margin: '0 auto', position: 'relative', top: '50%' }}>
+        <div style={{ width: "170px", margin: "0 auto", position: "relative", top: "50%" }}>
           <strong>Drag one or more files</strong>
         </div>
       </div>
