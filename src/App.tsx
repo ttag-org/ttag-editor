@@ -9,6 +9,10 @@ import indexDocs from './searcher';
 import { Searcher } from './searcher';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
+function isTranslated(msg: Message): boolean {
+  return msg.msgstr.filter(s => !!s).length === msg.msgstr.length;
+}
+
 type EditorProps = {
   poData: PoData;
 };
@@ -106,17 +110,46 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   }
 
+  renderStats() {
+    const translations = this.state.poData.translations[''];
+    const keys = Object.keys(translations);
+    const translatedCount = keys.reduce((acc: number, key: string): number => {
+      return isTranslated(translations[key]) ? acc + 1 : acc;
+    },                                  0);
+    const untranslatedPercent = Math.floor(translatedCount / keys.length * 100);
+    return (
+      <div style={{ width: '720px', margin: '0 auto' }}>
+        <div style={{ border: '1px solid black', height: '50px', width: '500px', margin: '0 auto' }}>
+          <div
+            style={{
+              'background-color': 'red',
+              height: '100%',
+              width: `${untranslatedPercent}%`,
+              color: 'cyan',
+              'text-align': 'center',
+              'line-height': '50px',
+              'vertical-align': 'middle'
+            }}
+          >
+            {`${untranslatedPercent}% is translated`}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   renderMsgs(page: number) {
     const msgs = this.getFilteredMessages();
     const slice = msgs.slice(page * 24, page * 24 + 24);
     return (
       <div>
         <div>
-          <input 
-            type="text" 
-            value={this.state.searchTerm} 
-            placeholder="Search" 
-            onChange={ev => this.updateSearchTerm(ev.target.value)} 
+          <input
+            type="text"
+            value={this.state.searchTerm}
+            placeholder="Search"
+            autoFocus={true}
+            onChange={ev => this.updateSearchTerm(ev.target.value)}
           />
         </div>
         <Link to={`/page/${page - 1}`}>Prev</Link>
@@ -130,9 +163,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   renderTranslate() {
     const translations = this.state.poData.translations[''];
     const keys = Object.keys(translations);
-    const untranslatedKey = keys
-      .slice(1)
-      .find(k => translations[k].msgstr.filter(s => !!s).length !== translations[k].msgstr.length);
+    const untranslatedKey = keys.slice(1).find(k => !isTranslated(translations[k]));
     if (untranslatedKey === undefined) {
       return <div>All Done!</div>;
     } else {
@@ -150,8 +181,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       <Router>
         <div style={{ width: '500px', margin: '0 auto' }}>
           <Link to={`/translate`}>Translate</Link>
-          <Link to={`/`}>All</Link>
-          <Route exact={true} path="/" component={() => this.renderMsgs(0)} />
+          <Link to={`/all`}>All</Link>
+          <Route exact={true} path="/" component={() => this.renderStats()} />
+          <Route exact={true} path="/all" component={() => this.renderMsgs(0)} />
           <Route exact={true} path="/translate" component={() => this.renderTranslate()} />
           <Route
             path="/page/:page"
