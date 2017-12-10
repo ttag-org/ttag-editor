@@ -9,8 +9,8 @@ const App = () => {
     <Router>
       <Switch>
         <Route path="/" exact={true} component={Home} />
-        <Route path="/translate" exact={true} component={Translate} />
-        <Route path="/all" exact={true} component={TranslateAll} />
+        <Route path="/translate" component={Translate} />
+        <Route path="/all/:page?" component={TranslateAll} />
       </Switch>
     </Router>
   );

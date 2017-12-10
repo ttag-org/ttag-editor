@@ -29,13 +29,13 @@ export const Stats = (props: StatsProps) => {
       >
         <div
           style={{
-            "background-color": "red",
+            "backgroundColor": "red",
             height: "100%",
             width: `${untranslatedPercent}%`,
             color: "cyan",
-            "text-align": "center",
-            "line-height": "50px",
-            "vertical-align": "middle"
+            "textAlign": "center",
+            "lineHeight": "50px",
+            "verticalAlign": "middle"
           }}
         >
           {`${untranslatedPercent}% is translated`}
