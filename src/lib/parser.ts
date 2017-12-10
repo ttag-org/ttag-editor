@@ -1,5 +1,4 @@
 import { po } from "gettext-parser";
-import "./declarations";
 
 export interface Comments {
   reference?: string;

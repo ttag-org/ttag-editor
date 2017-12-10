@@ -3,15 +3,15 @@ import { Comments } from "./parser";
 
 interface Document {
   msgid: string;
-  msgctxt?: string;
   comments?: Comments;
+  msgctxt?: string;
 }
 
 export interface Searcher {
   search: (term: string) => Document[];
 }
 
-export default function indexDocs(docs: Document[]): Searcher {
+export function indexDocs(docs: Document[]): Searcher {
   var options = {
     shouldSort: true,
     threshold: 0.6,
