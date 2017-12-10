@@ -1,5 +1,5 @@
-import * as Fuse from 'fuse.js';
-import { Comments } from './parser';
+import * as Fuse from "fuse.js";
+import { Comments } from "./parser";
 
 interface Document {
   msgid: string;
@@ -10,7 +10,7 @@ export interface Searcher {
   search: (term: string) => Document[];
 }
 
-export default function indexDocs(docs: Document[]): Searcher {
+export function indexDocs(docs: Document[]): Searcher {
   var options = {
     shouldSort: true,
     threshold: 0.6,
@@ -18,7 +18,7 @@ export default function indexDocs(docs: Document[]): Searcher {
     distance: 100,
     maxPatternLength: 32,
     minMatchCharLength: 1,
-    keys: ['msgid', 'comments.reference']
+    keys: ["msgid", "comments.reference"]
   };
   return new Fuse(docs, options);
 }

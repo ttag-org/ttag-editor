@@ -1,7 +1,7 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Home } from "../Home";
-import { MessageList } from "../MessageList";
+import { TranslateAll } from "../TranslateAll";
 import { Translate } from "../Translate";
 
 const App = () => {
@@ -10,7 +10,7 @@ const App = () => {
       <Switch>
         <Route path="/" exact={true} component={Home} />
         <Route path="/translate" exact={true} component={Translate} />
-        <Route path="/all" exact={true} component={MessageList} />
+        <Route path="/all" exact={true} component={TranslateAll} />
       </Switch>
     </Router>
   );
