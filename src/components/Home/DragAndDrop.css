@@ -1,0 +1,14 @@
+.dndContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dndArea {
+  border: 3px dotted gray;
+  width: 70%;
+  height: 60%;
+  margin-top: 20%;
+  text-align: center;
+  line-height: 200px;
+}
