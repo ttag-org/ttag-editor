@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { PoData, Message, Translations } from "src/lib/parser";
 import { Searcher, indexDocs } from "src/lib/searcher";
 import { MessageList } from "src/components/MessageList";
+import { Card, CardText, CardActions } from "material-ui/Card";
+import RaisedButton from "material-ui/RaisedButton";
+import TextField from "material-ui/TextField";
 
 type TranslateAllWrapperState = {
   searchTerm: string;
@@ -11,7 +14,12 @@ type TranslateAllWrapperState = {
 interface TranslateAllWrapperProps {
   poData: PoData;
   page: number;
-  onMsgUpdate: (msgid: string, msgctxt: string, idx: number, value: string) => void;
+  onMsgUpdate: (
+    msgid: string,
+    msgctxt: string,
+    idx: number,
+    value: string
+  ) => void;
 }
 
 function* iterateTranslations(
@@ -67,22 +75,31 @@ export class TranslateAllWrapper extends React.Component<
     const messagesPage = msgs.slice(page * 24, page * 24 + 24);
     return (
       <div>
-        <div>
-          <input
-            type="text"
-            value={this.state.searchTerm}
-            placeholder="Search"
-            autoFocus={true}
-            onChange={ev => this.updateSearchTerm(ev.target.value)}
-          />
-        </div>
-        <Link to={`/all/${page - 1}`}>Prev</Link>
-        <span>Current {page}</span>
-        <Link to={`/all/${page + 1}`}>Next</Link>
+        <Card>
+          <CardText>
+            <TextField
+              type="text"
+              value={this.state.searchTerm}
+              hintText="Search by msgid"
+              autoFocus={true}
+              onChange={(ev, newValue) => this.updateSearchTerm(newValue)}
+            />
+          </CardText>
+        </Card>
         <MessageList
           messages={messagesPage}
           onMsgUpdate={this.props.onMsgUpdate}
         />
+        <Card>
+          <CardActions>
+            <Link to={`/all/${page - 1}`}>
+              <RaisedButton secondary={true} label="Prev"/>
+            </Link>
+            <Link to={`/all/${page + 1}`}>
+              <RaisedButton secondary={true} label="Next"/>
+            </Link>
+          </CardActions>
+        </Card>
       </div>
     );
   }
