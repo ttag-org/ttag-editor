@@ -6,14 +6,14 @@ import { DragAndDrop } from "./DragAndDrop";
 import { actionCreators } from "src/components/App/actions";
 
 const mapStateToProps = (state: RootState) => ({
-    poFile: state.app.poFile,
+  poFile: state.app.poFile
 });
 
 const mapDispatchToProps = { onFileLoad: actionCreators.addPoFile };
 
-export const Home = connect(mapStateToProps, mapDispatchToProps)((props) => {
-    if (props.poFile) {
-        return <Stats poFile={props.poFile}/>;
-    }
-    return <DragAndDrop onFileAvailable={props.onFileLoad}/>;
+export const Home = connect(mapStateToProps, mapDispatchToProps)(props => {
+  if (props.poFile) {
+    return <Stats poFile={props.poFile} />;
+  }
+  return <DragAndDrop onFileAvailable={props.onFileLoad} />;
 });

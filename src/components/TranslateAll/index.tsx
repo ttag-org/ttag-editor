@@ -17,11 +17,14 @@ const mapDispatchToProps = {
 export const TranslateAll = connect(mapStateToProps, mapDispatchToProps)(
   props => {
     if (!props.poFile) {
-      return <Redirect to="/"/>;
+      return <Redirect to="/" />;
     }
     return (
       <BasePage>
-        <MessageList poData={props.poFile} onMsgUpdate={props.onTranslationUpdate} />
+        <MessageList
+          poData={props.poFile}
+          onMsgUpdate={props.onTranslationUpdate}
+        />
       </BasePage>
     );
   }

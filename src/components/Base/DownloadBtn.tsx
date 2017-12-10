@@ -19,6 +19,10 @@ function downloadTranslations(poData: PoData) {
 
 export const DownloadBtn = (props: DownloadBtnProps) => {
   return (
-      <input type="button" value="Download" onClick={() => downloadTranslations(props.poFile)} />
+    <input
+      type="button"
+      value="Download"
+      onClick={() => downloadTranslations(props.poFile)}
+    />
   );
 };

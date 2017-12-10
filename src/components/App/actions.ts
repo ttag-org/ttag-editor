@@ -2,7 +2,7 @@ import { PoData } from "src/lib/parser";
 
 export enum AppActionsEnum {
   LOAD_PO_FILE = "LOAD_PO_FILE",
-  UPDATE_TRANSLATION = "UPDATE_TRANSLATION",
+  UPDATE_TRANSLATION = "UPDATE_TRANSLATION"
 }
 
 export interface AddPoFileAction {
@@ -20,13 +20,18 @@ export interface UpdateTranslation {
 }
 
 export const actionCreators = {
-    addPoFile: (file: PoData): AddPoFileAction => ({
-      type: AppActionsEnum.LOAD_PO_FILE,
-      payload: { file },
-    }),
-    updateTranslation: (msgid: string, idx: number, value: string): UpdateTranslation => ({
-      type: AppActionsEnum.UPDATE_TRANSLATION, payload: { msgid, idx, value }
-    }),
+  addPoFile: (file: PoData): AddPoFileAction => ({
+    type: AppActionsEnum.LOAD_PO_FILE,
+    payload: { file }
+  }),
+  updateTranslation: (
+    msgid: string,
+    idx: number,
+    value: string
+  ): UpdateTranslation => ({
+    type: AppActionsEnum.UPDATE_TRANSLATION,
+    payload: { msgid, idx, value }
+  })
 };
 
 export type AppActions = AddPoFileAction | UpdateTranslation;

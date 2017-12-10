@@ -11,7 +11,7 @@ const mapStateToProps = (state: RootState) => ({
 
 export const BasePage = connect(mapStateToProps, {})(props => {
   if (!props.poFile) {
-      return <Redirect to="/"/>;
+    return <Redirect to="/" />;
   }
   return (
     <div style={{ width: "500px", margin: "0 auto" }}>

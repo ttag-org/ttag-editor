@@ -10,14 +10,22 @@ export const initialState: AppState = {
   poFile: null
 };
 
-function updateTranslation(state: AppState, msgid: string, idx: number, value: string) {
+function updateTranslation(
+  state: AppState,
+  msgid: string,
+  idx: number,
+  value: string
+) {
   // Mutable state, hoozah!
   if (state.poFile) {
     state.poFile.translations[""][msgid].msgstr[idx] = value;
   }
 }
 
-export const reducer: Reducer<AppState> = (state = initialState, action: AppActions) => {
+export const reducer: Reducer<AppState> = (
+  state = initialState,
+  action: AppActions
+) => {
   switch (action.type) {
     case AppActionsEnum.LOAD_PO_FILE:
       return { ...state, poFile: action.payload.file };
@@ -26,7 +34,8 @@ export const reducer: Reducer<AppState> = (state = initialState, action: AppActi
         state,
         action.payload.msgid,
         action.payload.idx,
-        action.payload.value);
+        action.payload.value
+      );
       return state;
     default:
       return state;

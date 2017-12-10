@@ -10,16 +10,13 @@ import { createLogger } from "redux-logger";
 
 const logger = createLogger();
 
-const store = createStore(
-    rootReducer,
-    applyMiddleware(logger),
-);
+const store = createStore(rootReducer, applyMiddleware(logger));
 
 export const MainApp = () => {
   return (
-      <Provider store={store}>
-        <App/>
-      </Provider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   );
 };
 

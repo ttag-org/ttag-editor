@@ -11,7 +11,9 @@ const mapStateToProps = (state: RootState) => ({
   poFile: state.app.poFile
 });
 
-const mapDispatchToProps = { onTranslationUpdate: actionCreators.updateTranslation };
+const mapDispatchToProps = {
+  onTranslationUpdate: actionCreators.updateTranslation
+};
 
 function isTranslated(msg: Message): boolean {
   return msg.msgstr.filter(s => !!s).length === msg.msgstr.length;
@@ -23,7 +25,9 @@ export const Translate = connect(mapStateToProps, mapDispatchToProps)(props => {
   }
   const translations = props.poFile.translations[""];
   const keys = Object.keys(translations);
-  const untranslatedKey = keys.slice(1).find(k => !isTranslated(translations[k]));
+  const untranslatedKey = keys
+    .slice(1)
+    .find(k => !isTranslated(translations[k]));
 
   if (untranslatedKey === undefined) {
     return (
@@ -35,7 +39,10 @@ export const Translate = connect(mapStateToProps, mapDispatchToProps)(props => {
 
   return (
     <BasePage>
-      <MessageItem message={translations[untranslatedKey]} onUpdate={props.onTranslationUpdate} />
+      <MessageItem
+        message={translations[untranslatedKey]}
+        onUpdate={props.onTranslationUpdate}
+      />
       <Link to={`/translate`}>Next</Link>
     </BasePage>
   );
