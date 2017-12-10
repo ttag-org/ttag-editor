@@ -13,7 +13,7 @@ const logger = createLogger();
 
 const store = createStore(rootReducer, applyMiddleware(logger));
 
-export const MainApp = () => {
+const MainApp = () => {
   return (
     <Provider store={store}>
       <MuiThemeProvider>
