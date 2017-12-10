@@ -11,11 +11,13 @@ export const MessageList = (props: MessageListProps) => {
     return (
         <div>
           {props.messages.map(m => (
-            <MessageItem
-              key={`${m.msgctxt}-${m.msgid}`}
-              message={m}
-              onUpdate={props.onMsgUpdate}
-            />
+            <div style={{marginTop: "10px"}}>
+              <MessageItem
+                key={`${m.msgctxt}-${m.msgid}`}
+                message={m}
+                onUpdate={props.onMsgUpdate}
+              />
+            </div>
           ))}
         </div>
     );

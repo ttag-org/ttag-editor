@@ -36,7 +36,8 @@ export const MessageItem = (props: MessageProps) => {
               return (
                   <TextField
                     key={`${msg.msgid}_${index}`}
-                    floatingLabelText={`Translation for "${msg.msgid}"`}
+                    hintText={`Translation for "${msg.msgid}"`}
+                    floatingLabelText="Enter translation"
                     multiLine={true}
                     defaultValue={translation}
                     onChange={(ev, value) => props.onUpdate(msg.msgid, msg.msgctxt || "", index, value)}
