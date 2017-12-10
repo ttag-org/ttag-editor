@@ -2,6 +2,7 @@ import * as React from "react";
 import { DragEvent } from "react";
 import { PoData, parse } from "src/lib/parser";
 import AppBar from "material-ui/AppBar";
+import Paper from "material-ui/Paper";
 import "./DragAndDrop.css";
 import { EditorTitle } from "src/components/Base/EditorTitle";
 
@@ -49,9 +50,9 @@ export class DragAndDrop extends React.Component<DragProps, {}> {
           onDrop={this.onDrop}
           onDragOver={this.onDragOver}
         >
-          <div className="dndArea">
+          <Paper className="dndArea" zDepth={3}>
             <strong>Drag one or more files</strong>
-          </div>
+          </Paper>
         </div>
       </div>
     );

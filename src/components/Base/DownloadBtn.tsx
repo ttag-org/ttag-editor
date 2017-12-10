@@ -1,6 +1,7 @@
 import * as React from "react";
 import { PoData } from "src/lib/parser";
 import { serialize } from "src/lib/serializer";
+import RaisedButton from "material-ui/RaisedButton";
 
 type DownloadBtnProps = {
   poFile: PoData;
@@ -19,9 +20,9 @@ function downloadTranslations(poData: PoData) {
 
 export const DownloadBtn = (props: DownloadBtnProps) => {
   return (
-    <input
-      type="button"
-      value="Download"
+    <RaisedButton
+      secondary={true}
+      label="Download"
       onClick={() => downloadTranslations(props.poFile)}
     />
   );

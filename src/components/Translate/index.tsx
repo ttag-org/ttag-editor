@@ -6,6 +6,8 @@ import { MessageItem } from "src/components/Message";
 import { Link, Redirect } from "react-router-dom";
 import { Message } from "src/lib/parser";
 import { actionCreators } from "src/components/App/actions";
+import RaisedButton from "material-ui/RaisedButton";
+import { Card, CardActions } from "material-ui/Card";
 
 const mapStateToProps = (state: RootState) => ({
   poFile: state.app.poFile
@@ -43,7 +45,13 @@ export const Translate = connect(mapStateToProps, mapDispatchToProps)(props => {
         message={translations[untranslatedKey]}
         onUpdate={props.onTranslationUpdate}
       />
-      <Link to={`/translate`}>Next</Link>
+      <Card>
+        <CardActions>
+          <Link to={`/translate`}>
+            <RaisedButton primary={true} label="Next" />
+          </Link>
+        </CardActions>
+      </Card>
     </BasePage>
   );
 });
