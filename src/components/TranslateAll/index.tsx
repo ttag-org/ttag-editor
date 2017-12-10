@@ -22,7 +22,7 @@ interface TranslateAllParams {
 interface TranslateAllWitRouteProps
   extends RouteComponentProps<TranslateAllParams> {
   poFile: PoData;
-  onMsgUpdate: (msgid: string, idx: number, value: string) => void;
+  onMsgUpdate: (msgid: string, msgctxt: string, idx: number, value: string) => void;
 }
 
 const TranslateAllWitRoute = withRouter<TranslateAllWitRouteProps>(props => {

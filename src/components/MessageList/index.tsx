@@ -4,7 +4,7 @@ import { MessageItem } from "src/components/Message";
 
 type MessageListProps = {
   messages: Message[];
-  onMsgUpdate: (msgid: string, idx: number, value: string) => void;
+  onMsgUpdate: (msgid: string, msgctxt: string, idx: number, value: string) => void;
 };
 
 export const MessageList = (props: MessageListProps) => {
@@ -12,7 +12,7 @@ export const MessageList = (props: MessageListProps) => {
         <div>
           {props.messages.map(m => (
             <MessageItem
-              key={m.msgid}
+              key={`${m.msgctxt}-${m.msgid}`}
               message={m}
               onUpdate={props.onMsgUpdate}
             />

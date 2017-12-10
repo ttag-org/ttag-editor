@@ -13,6 +13,7 @@ export type Message = {
   msgid_plural?: string;
   comments?: Comments;
   msgstr: string[];
+  msgctxt?: string;
 };
 
 export type Messages = {

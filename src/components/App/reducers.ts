@@ -13,12 +13,13 @@ export const initialState: AppState = {
 function updateTranslation(
   state: AppState,
   msgid: string,
+  msgctxt: string,
   idx: number,
   value: string
 ) {
   // Mutable state, hoozah!
   if (state.poFile) {
-    state.poFile.translations[""][msgid].msgstr[idx] = value;
+    state.poFile.translations[msgctxt || ""][msgid].msgstr[idx] = value;
   }
 }
 
@@ -33,6 +34,7 @@ export const reducer: Reducer<AppState> = (
       updateTranslation(
         state,
         action.payload.msgid,
+        action.payload.msgctxt,
         action.payload.idx,
         action.payload.value
       );

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { PoData, Message } from "src/lib/parser";
+import { PoData, Message, Translations } from "src/lib/parser";
 import { Searcher, indexDocs } from "src/lib/searcher";
 import { MessageList } from "src/components/MessageList";
 
@@ -11,7 +11,18 @@ type TranslateAllWrapperState = {
 interface TranslateAllWrapperProps {
   poData: PoData;
   page: number;
-  onMsgUpdate: (msgid: string, idx: number, value: string) => void;
+  onMsgUpdate: (msgid: string, msgctxt: string, idx: number, value: string) => void;
+}
+
+function* iterateTranslations(
+  translations: Translations
+): IterableIterator<Message> {
+  for (const ctxtId of Object.keys(translations)) {
+    const ctxt = translations[ctxtId];
+    for (const msgid of Object.keys(ctxt)) {
+      yield ctxt[msgid];
+    }
+  }
 }
 
 export class TranslateAllWrapper extends React.Component<
@@ -28,11 +39,12 @@ export class TranslateAllWrapper extends React.Component<
     super(props);
     this.updateSearchTerm = this.updateSearchTerm.bind(this);
     this.getFilteredMessages = this.getFilteredMessages.bind(this);
-    const docs = [];
-    for (let key of Object.keys(props.poData.translations[""])) {
-      docs.push(props.poData.translations[""][key]);
-    }
-    this.msgIndex = indexDocs(docs);
+    this.getMessages = this.getMessages.bind(this);
+    this.msgIndex = indexDocs(this.getMessages());
+  }
+
+  getMessages(): Message[] {
+    return Array.from(iterateTranslations(this.props.poData.translations));
   }
 
   updateSearchTerm(searchTerm: string) {
@@ -43,10 +55,9 @@ export class TranslateAllWrapper extends React.Component<
     const poData = this.props.poData;
     if (this.state.searchTerm.trim()) {
       const docs = this.msgIndex.search(this.state.searchTerm.trim());
-      return docs.map(d => this.props.poData.translations[""][d.msgid]);
+      return docs.map(d => poData.translations[d.msgctxt || ""][d.msgid]);
     } else {
-      const keys = Object.keys(poData.translations[""]);
-      return keys.map(k => poData.translations[""][k]);
+      return this.getMessages();
     }
   }
 

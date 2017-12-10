@@ -14,6 +14,7 @@ export interface UpdateTranslation {
   readonly type: AppActionsEnum.UPDATE_TRANSLATION;
   readonly payload: {
     msgid: string;
+    msgctxt: string;
     idx: number;
     value: string;
   };
@@ -26,11 +27,12 @@ export const actionCreators = {
   }),
   updateTranslation: (
     msgid: string,
+    msgctxt: string,
     idx: number,
     value: string
   ): UpdateTranslation => ({
     type: AppActionsEnum.UPDATE_TRANSLATION,
-    payload: { msgid, idx, value }
+    payload: { msgid, idx, value, msgctxt }
   })
 };
 

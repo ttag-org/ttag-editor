@@ -4,6 +4,7 @@ import { Comments } from "./parser";
 interface Document {
   msgid: string;
   comments?: Comments;
+  msgctxt?: string;
 }
 
 export interface Searcher {
