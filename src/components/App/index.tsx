@@ -6,7 +6,7 @@ import { Translate } from "../Translate";
 
 const App = () => {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Switch>
         <Route path="/" exact={true} component={Home} />
         <Route path="/translate" component={Translate} />
