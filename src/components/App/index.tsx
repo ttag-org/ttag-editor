@@ -11,6 +11,7 @@ const App = () => {
         <Route path="/" exact={true} component={Home} />
         <Route path="/translate" component={Translate} />
         <Route path="/all/:page?" component={TranslateAll} />
+        <Route component={() => <span>404</span>}/>
       </Switch>
     </Router>
   );
