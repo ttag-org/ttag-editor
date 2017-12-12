@@ -6,16 +6,21 @@ import TextField from "material-ui/TextField";
 
 type MessageProps = {
   message: Message;
-  onUpdate: (msgid: string, msgctxt: string, idx: number, value: string) => void;
+  onUpdate: (
+    msgid: string,
+    msgctxt: string,
+    idx: number,
+    value: string
+  ) => void;
 };
 
-function MessageTitle({ message }: { message: Message}) {
+function MessageTitle({ message }: { message: Message }) {
   const { msgctxt, msgid } = message;
   let chipTitle: {} = msgid;
   if (msgctxt) {
     chipTitle = (
-      <span style={{display: "flex", flexDirection: "row"}}>
-        <span style={{marginRight: "10px"}}>{msgid}</span>
+      <span style={{ display: "flex", flexDirection: "row" }}>
+        <span style={{ marginRight: "10px" }}>{msgid}</span>
         <Chip>{msgctxt}</Chip>
       </span>
     );
@@ -30,22 +35,25 @@ export const MessageItem = (props: MessageProps) => {
   }
   return (
     <Card>
-        <MessageTitle message={msg}/>
-        <CardText>
-            {msg.msgstr.map((translation: string, index: number) => {
-              return (
-                  <TextField
-                    key={`${msg.msgid}_${index}`}
-                    hintText={`Translation for "${msg.msgid}"`}
-                    floatingLabelText="Enter translation"
-                    multiLine={true}
-                    defaultValue={translation}
-                    onChange={(ev, value) => props.onUpdate(msg.msgid, msg.msgctxt || "", index, value)}
-                    style={{ display: "inline-block" }}
-                  />
-              );
-            })}
-        </CardText>
-      </Card>
+      <MessageTitle message={msg} />
+      <CardText>
+        {msg.msgstr.map((translation: string, index: number) => {
+          return (
+            <TextField
+              id={`trans_${msg.msgid}_${index}`}
+              key={`${msg.msgid}_${index}`}
+              hintText={`Translation for "${msg.msgid}"`}
+              floatingLabelText="Enter translation"
+              multiLine={true}
+              defaultValue={translation}
+              onChange={(ev, value) =>
+                props.onUpdate(msg.msgid, msg.msgctxt || "", index, value)
+              }
+              style={{ display: "inline-block", marginRight: "20px" }}
+            />
+          );
+        })}
+      </CardText>
+    </Card>
   );
 };
