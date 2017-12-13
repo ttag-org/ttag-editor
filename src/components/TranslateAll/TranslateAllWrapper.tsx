@@ -87,6 +87,7 @@ export class TranslateAllWrapper extends React.Component<
           </CardText>
         </Card>
         <MessageList
+          language={this.props.poData.headers.language}
           messages={messagesPage}
           onMsgUpdate={this.props.onMsgUpdate}
         />

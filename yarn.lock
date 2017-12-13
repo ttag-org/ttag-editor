@@ -4523,6 +4523,10 @@ pkg-dir@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
+plural-forms@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/plural-forms/-/plural-forms-0.1.2.tgz#11a4fb16f58ae3c89d2dd254c9e8f8aaff58c2a7"
+
 portfinder@^1.0.9:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.13.tgz#bb32ecd87c27104ae6ee44b5a3ccbf0ebb1aede9"
