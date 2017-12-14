@@ -42,6 +42,7 @@ export const Translate = connect(mapStateToProps, mapDispatchToProps)(props => {
   return (
     <BasePage>
       <MessageItem
+        language={props.poFile.headers.language}
         message={translations[untranslatedKey]}
         onUpdate={props.onTranslationUpdate}
       />

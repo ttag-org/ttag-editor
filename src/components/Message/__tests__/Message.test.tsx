@@ -12,6 +12,13 @@ const message = {
   msgid: "test",
   msgstr: ["trans"]
 };
+
+const messagePlural = {
+  msgid: "${ n } banana",
+  msgid_plural: "${ n } bananas",
+  msgstr: ["", "", ""]
+};
+
 const onUpdate = () => void 0;
 
 describe("<MessageItem />", () => {
@@ -40,5 +47,35 @@ describe("<MessageItem />", () => {
   it("should render floating label text", () => {
     const translation = msgEl.find(TextField);
     expect(translation.prop("floatingLabelText")).toBe("Enter translation");
+  });
+});
+
+describe("<MessageItem /> plurals", () => {
+  const msgEl = mount(
+    <MessageItem message={messagePlural} onUpdate={onUpdate} language="uk" />,
+    { context: { muiTheme },
+    childContextTypes: { muiTheme: PropTypes.object } }
+  );
+
+  it("renders source string", () => {
+    const header = msgEl.find(CardTitle);
+    expect(header.at(0).prop("title")).toBe("${ n } banana");
+    expect(header.at(1).prop("title")).toBe("${ n } bananas");
+  });
+
+  it("should apply proper plural form hint", () => {
+    const translation = msgEl.find(TextField);
+
+    expect(translation
+        .at(0)
+        .prop("floatingLabelText")).toBe("Form 1 (example: 1)");
+    
+    expect(translation
+      .at(1)
+      .prop("floatingLabelText")).toBe("Form 2 (example: 2)");
+    
+    expect(translation
+      .at(2)
+      .prop("floatingLabelText")).toBe("Form 3 (example: 5)");
   });
 });

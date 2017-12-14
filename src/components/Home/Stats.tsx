@@ -2,7 +2,6 @@ import * as React from "react";
 import { PoData, Message } from "src/lib/parser";
 import { BasePage } from "src/components/Base";
 import LinearProgress from "material-ui/LinearProgress";
-// import Paper from "material-ui/Paper";
 import { Card, CardHeader, CardActions } from "material-ui/Card";
 import RaisedButton from "material-ui/RaisedButton";
 import { Link } from "react-router-dom";
