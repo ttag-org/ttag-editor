@@ -2,9 +2,9 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   devtool: 'inline-source-map',
-  entry: './src/index.tsx',
+  entry: './index.tsx',
   output: {
-    filename: 'bundle.js'
+    filename: '../dist/bundle.js'
   },
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
