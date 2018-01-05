@@ -23,7 +23,7 @@ function isTranslated(msg: Message): boolean {
 
 export const Translate = connect(mapStateToProps, mapDispatchToProps)(props => {
   if (!props.poFile) {
-    return <Redirect to="/" />;
+    return <Redirect to="/upload" />;
   }
   const translations = props.poFile.translations[""];
   const keys = Object.keys(translations);
