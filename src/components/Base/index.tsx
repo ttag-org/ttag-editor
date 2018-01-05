@@ -12,6 +12,9 @@ import { PoData } from "src/lib/parser";
 const TopMenu = (props: {poFile: PoData}) => {
   return (
     <div>
+      <Link to={`/upload`}>
+        <RaisedButton primary={true} label="Upload"/>
+      </Link>
       <Link to={`/all`}>
         <RaisedButton primary={true} label="All translations"/>
       </Link>

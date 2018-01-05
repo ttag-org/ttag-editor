@@ -38,7 +38,7 @@ const TranslateAllWitRoute = withRouter<TranslateAllWitRouteProps>(props => {
 export const TranslateAll = connect(mapStateToProps, mapDispatchToProps)(
   props => {
     if (!props.poFile) {
-      return <Redirect to="/" />;
+      return <Redirect to="/upload" />;
     }
     return (
       <BasePage>

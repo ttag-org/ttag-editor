@@ -1,10 +1,8 @@
 import * as React from "react";
 import { DragEvent } from "react";
 import { PoData, parse } from "src/lib/parser";
-import AppBar from "material-ui/AppBar";
 import Paper from "material-ui/Paper";
 import "./DragAndDrop.css";
-import { EditorTitle } from "src/components/Base/EditorTitle";
 
 type DragProps = {
   onFileAvailable: (file: PoData) => void;
@@ -43,8 +41,6 @@ export class DragAndDrop extends React.Component<DragProps, {}> {
 
   render() {
     return (
-      <div>
-        <AppBar title={<EditorTitle/>} iconElementLeft={<span />} />
         <div
           className="dndContainer"
           onDrop={this.onDrop}
@@ -53,7 +49,6 @@ export class DragAndDrop extends React.Component<DragProps, {}> {
           <Paper className="dndArea" zDepth={3}>
             <strong>Drag one or more files</strong>
           </Paper>
-        </div>
       </div>
     );
   }
