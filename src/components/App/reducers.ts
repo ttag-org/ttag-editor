@@ -4,10 +4,12 @@ import { Reducer } from "redux";
 
 export type AppState = {
   poFile: PoData | null;
+  source: string;
 };
 
 export const initialState: AppState = {
-  poFile: null
+  poFile: null,
+  source: 'upload'
 };
 
 function updateTranslation(

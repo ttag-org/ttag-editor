@@ -6,25 +6,33 @@ import AppBar from "material-ui/AppBar";
 import { EditorTitle } from "./EditorTitle";
 import { Link } from "react-router-dom";
 import { DownloadBtn } from "./DownloadBtn";
+import { SaveBtn } from "./SaveBtn";
 import RaisedButton from "material-ui/RaisedButton";
 import { PoData } from "src/lib/parser";
 
-const TopMenu = (props: {poFile: PoData}) => {
+const TopMenu = (props: {poFile: PoData, source: string}) => {
   return (
     <div>
-      <Link to={`/upload`}>
-        <RaisedButton primary={true} label="Upload"/>
-      </Link>
+      {
+        props.source == 'upload' ? (
+          <Link to={`/upload`}>
+            <RaisedButton primary={true} label="Upload"/>
+          </Link>
+        ) : null
+      }
       <Link to={`/all`}>
         <RaisedButton primary={true} label="All translations"/>
       </Link>
-      <DownloadBtn poFile={props.poFile}/>
+      {
+        props.source == 'local' ? <SaveBtn poFile={props.poFile}/> : <DownloadBtn poFile={props.poFile}/>
+      }
     </div>
   );
 };
 
 const mapStateToProps = (state: RootState) => ({
-  poFile: state.app.poFile
+  poFile: state.app.poFile,
+  source: state.app.source
 });
 
 export const BasePage = connect(mapStateToProps, {})(props => {
@@ -36,7 +44,7 @@ export const BasePage = connect(mapStateToProps, {})(props => {
       <AppBar
         title={<EditorTitle/>}
         iconElementLeft={<span />}
-        iconElementRight={<TopMenu poFile={props.poFile} />}
+        iconElementRight={<TopMenu poFile={props.poFile} source={props.source} />}
       />
       {props.children}
     </div>
