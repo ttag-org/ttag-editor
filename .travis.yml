@@ -11,6 +11,7 @@ before_script:
 - yarn
 before_deploy:
 - yarn build
+- webpack --config src/webpack.config.js
 deploy:
   - provider: pages
     skip_cleanup: true
@@ -19,6 +20,7 @@ deploy:
     on:
       branch: master
   - provider: npm
+    skip_cleanup: true
     email: alexmost1989@gmail.com
     api_key:
       secure: 1zSjUGWyLM6mR4ieCN+ec2TqdKMpXYXkVFZjkSchwcoH5uzL/Rvy1alQvFf1jJkQwlqp+MhdsV8N6blPAIHf5JAnvvV5Y6+hpmcFMsIz6sBHLrfKGtrAvjrXXz2P08pK6ozMQUctCvGapUSug7SGYNmMPnBH/P4ztMEa9BERBOHJFXFZjHSt6g1N08eOd6BJlZDgK+XjpUrIFi0cqjWmfKj2uzLA3dk9QELb4wAU2vEEdFQvwHCwFFIU8wREIh9oZ3CLIq0dlCzR2P95RoqbxeRAaGNS/3YVl29J3245dtiDom+aJnL1qlz0iqihW3E1131T8nAT+UPZhPFCm/rhE6K4lgfUfG8Pc43xq8fbOdSyhn/DI11rR0INaqCLI5gVDmmJ3Q0p0+2lH7W301/ClbmhSMjUN8hlgDwJNza5i0vYS7bHOkenTc/FxvkJbaqKLmnF8+GvQtL1ShZtmd+2nXF+e0Xi9Th/nXWBs7XPDZjnaKj+vrTrdqsnFZB+FoAMmmS89m9f3pZLJVY++IeZEvmWTYOcVgYt+dgMLZQzrooHI/XEikiHrAobOg2zNJaWJ8FB8oCIx1sFU9CgvGZooZCa+brGo4/nIBX20xqMTvg+evZ1mi5jTTG8XsFgAUTyDU957T2o3Uwgubavbr6juVQvlcr+9F50nZRiuhf2YlM=
