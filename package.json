@@ -1,6 +1,6 @@
 {
   "name": "c-3po-editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "fuse.js": "^3.2.0",
     "gettext-parser": "^1.3.0",
