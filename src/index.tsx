@@ -4,24 +4,50 @@ import "./declarations";
 import registerServiceWorker from "./registerServiceWorker";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import { rootReducer } from "./store";
+import { rootReducer,  RootState} from "./store";
 import App from "./components/App";
 import { createLogger } from "redux-logger";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { parse } from "src/lib/parser";
 
 const logger = createLogger();
 
-const store = createStore(rootReducer, applyMiddleware(logger));
+const config = window['C3POEDITOR'] || {};
 
-const MainApp = () => {
-  return (
-    <Provider store={store}>
-      <MuiThemeProvider>
-        <App />
-      </MuiThemeProvider>
-    </Provider>
-  );
-};
+console.log(config)
 
-ReactDOM.render(<MainApp />, document.getElementById("root") as HTMLElement);
-registerServiceWorker();
+const source =  config.source || 'upload';
+
+if (source == 'upload'){
+  mountApp({app: {
+    poFile: null,
+    source: source,    
+  }});
+} else if (source == 'local') {
+  fetch('/open').then((response) => response.text()).then(function (text) {
+    mountApp({
+        app: {
+          poFile: parse(text),
+          source: source,    
+        }
+     });
+  });
+}
+
+function mountApp(initialState: RootState){
+
+  const store = createStore(rootReducer, initialState, applyMiddleware(logger));
+
+  const MainApp = () => {
+    return (
+      <Provider store={store}>
+        <MuiThemeProvider>
+          <App />
+        </MuiThemeProvider>
+      </Provider>
+    );
+  };
+
+  ReactDOM.render(<MainApp />, document.getElementById("root") as HTMLElement);
+  registerServiceWorker();
+}
