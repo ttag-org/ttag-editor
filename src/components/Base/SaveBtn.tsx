@@ -9,11 +9,11 @@ type SaveBtnProps = {
 
 function saveTranslations(poData: PoData) {
   const content = serialize(poData);
-  fetch('/save', {
-      method: 'POST',
+  fetch("/save", {
+      method: "POST",
       headers: {
-        'Content-Type': 'text/plain',
-        'Content-Length': content.length.toString(),
+        "Content-Type": "text/plain",
+        "Content-Length": content.length.toString(),
       },
       body: content
   });
