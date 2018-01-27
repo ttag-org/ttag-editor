@@ -13,6 +13,7 @@ export class FileUpload extends React.Component<FileUploadProps, {}> {
   constructor(props: FileUploadProps) {
     super(props);
     this.onDrop = this.onDrop.bind(this);
+    this.onSelectFiles = this.onSelectFiles.bind(this);
   }
 
   onDrop(evt: DragEvent<HTMLDivElement>) {
@@ -29,7 +30,7 @@ export class FileUpload extends React.Component<FileUploadProps, {}> {
     evt.dataTransfer.dropEffect = "copy"; // Explicitly show this is a copy.
   }
 
-  onSelectFiles = (evt: React.FormEvent<HTMLInputElement>) => {
+  onSelectFiles(evt: React.FormEvent<HTMLInputElement>) {
     const target = (evt.target as HTMLInputElement);
     if (target.files !== null) {
       this.readFiles(target.files);
