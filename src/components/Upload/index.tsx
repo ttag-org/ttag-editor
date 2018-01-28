@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RootState } from "src/store";
 import { connect } from "react-redux";
-import { DragAndDrop } from "./DragAndDrop";
+import { FileUpload } from "./FileUpload";
 import { actionCreators, AddPoFileAction } from "src/components/App/actions";
 import { PoData } from "src/lib/parser";
 import { Dispatch } from "react-redux";
@@ -46,7 +46,7 @@ export const Upload = withRouter(
     return (
       <div>
         {props.poFile ? <AppBarWithFile /> : <EmptyAppBar />}
-        <DragAndDrop onFileAvailable={props.onFileLoad} />
+        <FileUpload onFileAvailable={props.onFileLoad} />
       </div>
     );
   })
