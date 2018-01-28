@@ -9,7 +9,7 @@ export type AppState = {
 
 export const initialState: AppState = {
   poFile: null,
-  source: 'upload'
+  source: "upload"
 };
 
 function updateTranslation(
