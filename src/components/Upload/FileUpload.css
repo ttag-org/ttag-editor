@@ -11,3 +11,11 @@
   text-align: center;
   line-height: 200px;
 }
+
+.fileInputButton {
+  vertical-align: middle;
+}
+
+.fileInput {
+  display: none;
+}

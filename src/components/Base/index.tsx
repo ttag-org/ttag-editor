@@ -14,8 +14,8 @@ const TopMenu = (props: {poFile: PoData, source: string, save: (text: string) =>
   return (
     <div>
       {
-        props.source == 'upload' ? (
-          <Link to={`/upload`}>
+        props.source === "upload" ? (
+          <Link to="/upload">
             <RaisedButton primary={true} label="Upload"/>
           </Link>
         ) : null
@@ -24,7 +24,11 @@ const TopMenu = (props: {poFile: PoData, source: string, save: (text: string) =>
         <RaisedButton primary={true} label="All translations"/>
       </Link>
       {
+<<<<<<< HEAD
         props.source == 'local' ? <SaveBtn poFile={props.poFile} save={props.save}/> : <DownloadBtn poFile={props.poFile}/>
+=======
+        props.source === "local" ? <SaveBtn poFile={props.poFile}/> : <DownloadBtn poFile={props.poFile}/>
+>>>>>>> e8f6c5dd77e49f572fc966a6c4a81e65709b0686
       }
     </div>
   );

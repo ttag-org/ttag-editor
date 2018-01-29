@@ -4,7 +4,7 @@ import "./declarations";
 import registerServiceWorker from "./registerServiceWorker";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import { rootReducer,  RootState} from "./store";
+import { rootReducer, RootState } from "./store";
 import App from "./components/App";
 import { createLogger } from "redux-logger";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
@@ -12,7 +12,7 @@ import { parse } from "src/lib/parser";
 
 const logger = createLogger();
 
-const config = window['C3POEDITOR'] || {};
+const config = window["C3POEDITOR"] || {};
 
 const load = config.load || new Promise((resolve) => resolve())
 const save = config.save || (() => null)
@@ -23,7 +23,7 @@ load.then((text: string) => {
   mountApp({app: {poFile, save, source}});
 })
 
-function mountApp(initialState: RootState){
+function mountApp(initialState: RootState) {
 
   const store = createStore(rootReducer, initialState, applyMiddleware(logger));
 
