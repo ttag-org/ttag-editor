@@ -14,25 +14,14 @@ const logger = createLogger();
 
 const config = window["C3POEDITOR"] || {};
 
-console.log(config);
+const load = config.load || new Promise((resolve) => resolve())
+const save = config.save || (() => null)
+const source = config.source || 'upload'
 
-const source =  config.source || "upload";
-
-if (source === "upload") {
-  mountApp({app: {
-    poFile: null,
-    source: source,    
-  }});
-} else if (source === "local") {
-  fetch("/open").then((response) => response.text()).then((text: string) => {
-    mountApp({
-        app: {
-          poFile: parse(text),
-          source: source,    
-        }
-     });
-  });
-}
+load.then((text: string) => {
+  const poFile = text ? parse(text): null;
+  mountApp({app: {poFile, save, source}});
+})
 
 function mountApp(initialState: RootState) {
 

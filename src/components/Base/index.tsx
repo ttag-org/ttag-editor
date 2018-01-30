@@ -10,7 +10,7 @@ import { SaveBtn } from "./SaveBtn";
 import RaisedButton from "material-ui/RaisedButton";
 import { PoData } from "src/lib/parser";
 
-const TopMenu = (props: {poFile: PoData, source: string}) => {
+const TopMenu = (props: {poFile: PoData, source: string, save: (text: string) => null}) => {
   return (
     <div>
       {
@@ -24,7 +24,7 @@ const TopMenu = (props: {poFile: PoData, source: string}) => {
         <RaisedButton primary={true} label="All translations"/>
       </Link>
       {
-        props.source === "local" ? <SaveBtn poFile={props.poFile}/> : <DownloadBtn poFile={props.poFile}/>
+        props.source == 'local' ? <SaveBtn poFile={props.poFile} save={props.save}/> : <DownloadBtn poFile={props.poFile}/>
       }
     </div>
   );
@@ -32,7 +32,8 @@ const TopMenu = (props: {poFile: PoData, source: string}) => {
 
 const mapStateToProps = (state: RootState) => ({
   poFile: state.app.poFile,
-  source: state.app.source
+  source: state.app.source,
+  save: state.app.save
 });
 
 export const BasePage = connect(mapStateToProps, {})(props => {
@@ -44,7 +45,7 @@ export const BasePage = connect(mapStateToProps, {})(props => {
       <AppBar
         title={<EditorTitle/>}
         iconElementLeft={<span />}
-        iconElementRight={<TopMenu poFile={props.poFile} source={props.source} />}
+        iconElementRight={<TopMenu poFile={props.poFile} source={props.source} save={props.save} />}
       />
       {props.children}
     </div>
