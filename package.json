@@ -1,6 +1,6 @@
 {
   "name": "c-3po-editor",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "unpkg": "dist/bundle.js",
   "dependencies": {
     "fuse.js": "^3.2.0",
